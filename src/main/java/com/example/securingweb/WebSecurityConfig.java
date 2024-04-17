@@ -63,6 +63,7 @@ public class WebSecurityConfig {
         .build();
 
     jwtDecoder.setJwtValidator(new DelegatingOAuth2TokenValidator<>(
+        new AudienceValidator(audience),
         new JwtIssuerValidator(issuer),
         new JwtTimestampValidator()));
 
