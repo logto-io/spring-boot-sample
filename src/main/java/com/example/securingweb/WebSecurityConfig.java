@@ -3,7 +3,6 @@ package com.example.securingweb;
 import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,9 +21,6 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 @EnableWebSecurity
 
 public class WebSecurityConfig {
-  @Value("${spring.security.oauth2.client.provider.logto.jwk-set-uri}")
-  private String jwkSetUri;
-
   @Autowired
   private ClientRegistrationRepository clientRegistrationRepository;
 
@@ -61,11 +57,14 @@ public class WebSecurityConfig {
 
   private Consumer<OAuth2AuthorizationRequest.Builder> authorizationRequestCustomizer() {
     return customizer -> customizer.additionalParameters(params -> {
-      // Set the prompt parameter to "login" to force the user to log in, otherwise
-      // user will auto consent if Logto has a valid session
-      params.put("prompt", "login");
+      // Set the prompt parameter to "consent". User will be auto consent if Logto has
+      // a valid session
+      params.put("prompt", "consent");
 
-      // params.put("resource", "https://test.logto.io/");
+      // Set the prompt parameter to "login" to force the user to sign in every time
+      // params.put("prompt", "login");
+
+      params.put("resource", "http://localhost:3001/api/test");
     });
   }
 }

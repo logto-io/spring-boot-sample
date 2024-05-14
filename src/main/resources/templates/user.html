@@ -18,6 +18,12 @@
   <form th:action="@{/logout}" method="post">
     <input type="submit" value="Logout" />
   </form>
+
+  <!-- Add this form in your HTML file -->
+  <form th:action="@{/user/getTokens}" method="get">
+    <input type="submit" value="Get Refresh Token" />
+  </form>
+
 </body>
 
 </html>
