@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,9 @@ import com.nimbusds.jose.proc.SecurityContext;
 @Controller
 @RequestMapping("/user")
 public class UserController {
+  @Value("${spring.security.oauth2.resourceserver.jwt.audiences}")
+  private String audience;
+
   @GetMapping
   public String user(Model model, Principal principal) {
     if (principal instanceof OAuth2AuthenticationToken) {
@@ -54,7 +58,7 @@ public class UserController {
   public String getTokens(Model model, OAuth2AuthenticationToken principal) {
 
     // Get new access token using refresh token for a given resource
-    getNewAccessToken(principal, "http://localhost:3001/api/test");
+    getNewAccessToken(principal, audience);
 
     OAuth2AccessToken accessToken = getAccessToken(principal);
     OAuth2RefreshToken refreshToken = getRefreshToken(principal);
